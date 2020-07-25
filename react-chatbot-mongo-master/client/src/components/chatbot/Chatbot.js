@@ -4,10 +4,11 @@ import axios from 'axios/index'
 import Message from './Message'
 
 class Chatbot extends Component {
-
+    messagesEnd;
     constructor(props) {
         super(props);
 
+        this._handleInputKeyPress = this._handleInputKeyPress.bind(this)
         this.state = {
             messages: []
         };
@@ -31,7 +32,7 @@ class Chatbot extends Component {
                 speaks: 'bot',
                 msg: msg
             }
-            this.setState({messages: [...this.state.messages]})
+            this.setState({messages: [...this.state.messages, says]})
         }
 
     }
@@ -52,6 +53,10 @@ class Chatbot extends Component {
         this.df_event_query('Welcome')
     }
 
+    componentDidUpdate() {
+        this.messagesEnd.scrollIntoView({behaviour: 'smooth'})
+    }
+
     renderMessages(stateMessages) {
         if (stateMessages) {
             return stateMessages.map((message, i) => {
@@ -62,13 +67,23 @@ class Chatbot extends Component {
         }
     }
 
+    _handleInputKeyPress(e) {
+        if(e.key === 'Enter') {
+            this.df_text_query(e.target.value)
+            e.target.value = ''
+        }
+    }
+
     render() {
         return (
             <div style={{height: 400, width: 400, float: 'right'}}>
                 <div id="chatbot" style={{height: '100%', width: '100%', overflow: 'auto'}}>
                     <h2>Chatbot</h2>
                     {this.renderMessages(this.state.messages)}
-                    <input type="text"/>
+                    <div ref={(el) => { this.messagesEnd = el}}
+                    style={{ float: 'left', clear: 'both'}}>
+                    </div>
+                    <input type="text" onKeyPress={this._handleInputKeyPress}/>
                 </div>
             </div>
         );
