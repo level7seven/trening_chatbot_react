@@ -6,6 +6,7 @@ const structjson = require('./utils.js')
 
 const projectID = config.googleProjectID
 const sessionID = config.dialogFlowSessionID
+const languageCode = config.dialogFlowSessionLanguageCode
 
 const credentials = {
     client_email: config.googleClientEmail,
@@ -14,7 +15,6 @@ const credentials = {
 
 const sessionClient = new dialogflow.SessionsClient({projectID, credentials});
 
-const languageCode = config.dialogFlowSessionLanguageCode
 
 module.exports = {
     textQuery: async function(text, userID,  parameters = {}) {
